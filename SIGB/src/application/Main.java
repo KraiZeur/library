@@ -17,6 +17,7 @@ public class Main extends Application {
 			primaryStage.show();
 			
 			System.out.println("test");
+			System.out.println("home sweet home");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
