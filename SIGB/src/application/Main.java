@@ -25,6 +25,7 @@ public class Main extends Application {
 			System.out.println("home sweet home");
 			System.out.println("work");
 			System.out.println("lollll");
+			System.out.println("newwwwwwwwwwwww");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
