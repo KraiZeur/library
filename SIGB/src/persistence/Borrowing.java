@@ -1,5 +1,5 @@
 package persistence;
 
-public class Test {
+public class Borrowing {
 
 }
