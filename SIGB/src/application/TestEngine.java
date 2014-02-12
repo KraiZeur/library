@@ -1,53 +1,92 @@
 package application;
 
-import java.util.List;
+import org.hibernate.Session;
 
-import dataProcess.dataAccess.DAOBook;
-import dataProcess.persistence.Book;
+import dataProcess.hibernateConfig.DBConnection;
+import dataProcess.hibernateConfig.DataInit;
+import dataProcess.persistenceLayer.Administrator;
+import dataProcess.persistenceLayer.Author;
+import dataProcess.persistenceLayer.Book;
+import dataProcess.persistenceLayer.BookSeries;
+import dataProcess.persistenceLayer.BookType;
+import dataProcess.persistenceLayer.Borrowing;
+import dataProcess.persistenceLayer.Customer;
+import dataProcess.persistenceLayer.CustomerAdress;
+import dataProcess.persistenceLayer.Editor;
+import dataProcess.persistenceLayer.Login;
+import dataProcess.persistenceLayer.Name;
+import dataProcess.persistenceLayer.Theme;
 
 public class TestEngine {
 
-	public static void main(String[] args) {
-//		DataInit.createTables();
-//		Book book = new Book("ceci est un text");
-//		Book book2 = new Book("ceci est un text");
-//
-		DAOBook daoBook = new DAOBook();
-//
-//		daoBook.create(book);
-//		daoBook.create(book2);
-//		daoBook.create(new Book("ok"));
-//		daoBook.create(new Book("ok2"));
-//		daoBook.create(new Book("ok3"));
-//
-//		book.setDescription("lolilo");
-//		
-//		daoBook.update(book);
-
-		List<Book> list = daoBook.findLimited(0,10);
-
-		if(list != null) {
-			for (Book bookTmp : list) {
-				System.out.println(bookTmp);
-			}
-		} else {
-			System.out.println("No result found");
+		public static void main(String[] args) {
+			DataInit.createTables();
+			Session session = DBConnection.getSession();
+			session.beginTransaction();
+			
+			//create author
+			Author author1 = new Author("biography","12-12-1992",new Name("Agatha","Christie"));
+			session.save(author1);
+			Author author2 = new Author("biography","25-11-1984",new Name("Emile","Zola"));
+			session.save(author2);
+			
+			//create editor
+			Editor editor1=new Editor();
+			editor1.setName("1er editeur");
+			session.save(editor1);
+			
+			//create collection
+			BookSeries bookSeries1 =new BookSeries();
+			bookSeries1.setName("1ère collection");
+			session.save(bookSeries1);
+			
+			//create theme
+			Theme theme1=new Theme();
+			theme1.setName("Dessins animés");
+			session.save(theme1);
+			
+			//create book
+			Book book1= new Book (BookType.comics,"cover1","Roi lion","simba et pumba",1987,true);
+			Book book2= new Book (BookType.novel,"cover2","Code Lyoko","on ira ,on saura, sauver notre existence",1992,false);
+			Book book3= new Book (BookType.comics,"cover3","Batman","Batman_description",1974,true);
+			Book book4= new Book (BookType.comics,"cover4","Pokemon","PIKACHUUU",1992,false);
+			session.save(book1);
+			session.save(book2);
+			session.save(book3);
+			session.save(book4);
+			
+			//create customer
+			Customer customer1 = new Customer(new Name("Jeremy","Carayon"), new CustomerAdress("33","rue Lebon","Sartrouville",78500),"10-02-2014");
+			session.save(customer1);
+			
+			//create Borrowing
+			Borrowing borrowing1=new Borrowing(9.99,"10-02-2014","11-02-2014");
+			session.save(borrowing1);
+			
+			//create Administrator
+			Administrator administrator1 = new Administrator(new Login("Prénom_Nom","password"));
+			session.save(administrator1);
+			
+			
+			//operations allow to link table "Book" and others table
+			book1.setAuthor(author1);
+			book1.setEditor(editor1);
+			book1.setBookSeries(bookSeries1);
+			book1.setTheme(theme1);
+			book2.setAuthor(author1);
+			book2.setTheme(theme1);
+			book3.setEditor(editor1);
+			book3.setAuthor(author2);
+			book4.setAuthor(author2);
+			book4.setBookSeries(bookSeries1);
+			book4.setTheme(theme1);
+			
+			//operations allow to link table "Borrowing" with others
+			borrowing1.setBook(book1);
+			borrowing1.setCustomer(customer1);
+				
+			session.getTransaction().commit();
+			session.close();
 		}
-		
-		list = daoBook.findLimited(0,2);
-
-		System.out.println("");
-		
-		if(list != null) {
-			for (Book bookTmp : list) {
-				System.out.println(bookTmp);
-			}
-		} else {
-			System.out.println("No result found");
-		}
-		
-		System.out.println(daoBook.find(1));
-		
-	}
 	
 }

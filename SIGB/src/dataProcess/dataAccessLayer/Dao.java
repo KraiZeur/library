@@ -1,13 +1,12 @@
-package dataProcess.dataAccess;
+package dataProcess.dataAccessLayer;
 
 import java.util.List;
+
 
 public interface Dao<T> {
 	boolean create(T object);
 	T find(int index);
-	List<T> findAll();
-	List<T> findLimited(int first, int offset);
-	int numberOfElement();
+	List<T> list();
 	boolean update(T object);
 	boolean delete(T object);
 }

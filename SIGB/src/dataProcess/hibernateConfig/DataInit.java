@@ -1,4 +1,4 @@
-package dataProcess;
+package dataProcess.hibernateConfig;
 
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
