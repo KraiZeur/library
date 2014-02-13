@@ -44,10 +44,20 @@ public class Main extends Application {
 	private BorderPane root = new BorderPane();
 	private GridPane grid = new GridPane();
 	private StackPane rootStack = new StackPane();
+	private ScreensController screenController = new ScreensController();
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			
+			primaryStage.getIcons().add(new Image("file:img/icon.png"));
+			primaryStage.setTitle("Easy SIGB");
+			
+			UserScreen userScreen = new UserScreen(screenController);
+			BookScreen bookScreen = new BookScreen(screenController);
+			screenController.addScreen("USER_SCREEN", userScreen);
+			screenController.addScreen("BOOK_SCREEN", bookScreen);
+			
 			
 			Scene scene = new Scene(root,1024,625);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -65,7 +75,7 @@ public class Main extends Application {
 			grid.getStyleClass().add("root-style");
 			
 			root.setTop(menuBar);
-			root.setCenter(rootStack);
+			root.setCenter(screenController);
 			root.setLeft(lateralBar);
 
 		} catch(Exception e) {
@@ -119,9 +129,9 @@ public class Main extends Application {
 		button2.setPrefWidth(150);
 		button2.setPrefHeight(35);
 
-		button2.setOnAction(new EventHandler<ActionEvent>() {
+		button.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
-		    	rootStack.getChildren().add(gestionUser());
+		    	screenController.setScreen("BOOK_SCREEN");
 		    }
 		});
 		
@@ -133,7 +143,7 @@ public class Main extends Application {
 		    @Override public void handle(ActionEvent e) {
 		    	FlowPane fp = new FlowPane();
 		    	fp.getStyleClass().add("view2-style");
-		    	rootStack.getChildren().add(fp);
+		    	rootStack.getChildren().add(gestionBook());
 		    }
 		});
 
@@ -141,6 +151,12 @@ public class Main extends Application {
 		button4.setPrefWidth(150);
 		button4.setPrefHeight(35);
 
+		button4.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+		    	screenController.setScreen("USER_SCREEN");
+		    }
+		});
+		
 		button4.getStyleClass().add("button-style-test");
 		button3.getStyleClass().add("button-style-test");
 		button.getStyleClass().add("button-style-test");
@@ -156,11 +172,11 @@ public class Main extends Application {
 		vBox.getChildren().addAll(
 				button,
 				rect[1],
-				button2,
+				button4,
 				rect[2],
 				button3,
 				rect[3],
-				button4,
+				button2,
 				rect[4],
 				but
 				);
@@ -208,56 +224,21 @@ public class Main extends Application {
 
 	}
 	
-	public HBox createBookPane() {
-		GridPane gridPane = new GridPane();
+	public VBox gestionBook() {
+		Image iconAddUser = new Image("file:img/customer-icon-add.png");
 		
-		HBox boxName = new HBox(5);
-		Label labelName = new Label("Book Name :");
-		TextField textFieldName = new TextField();
-		
-		boxName.getChildren().addAll(labelName, textFieldName);
-		
-		gridPane.add(boxName, 0, 0);
-		
-		return boxName;
-	}
-	
-	public VBox gestionUser() {
-		
-		Image iconAddBook = new Image("file:SIGB/img/book-icon-add.png");
-		Image iconFindBook = new Image("file:SIGB/img/book-icon-find.png");
-		Image iconRemoveBook = new Image("file:SIGB/img/book-icon-remove.png");
-
-        ImageView iconimgAddBook = new ImageView(iconAddBook);
-        Button buttonAddBook = new Button("Create a book", iconimgAddBook);
-        buttonAddBook.setContentDisplay(ContentDisplay.LEFT);
-        buttonAddBook.setPrefSize(650, 150);
-        buttonAddBook.getStyleClass().add("big-text");
+        ImageView iconimgAddUser = new ImageView(iconAddUser);
+        Button buttonAddUser = new Button("Create a book", iconimgAddUser);
+        buttonAddUser.setContentDisplay(ContentDisplay.LEFT);
+        buttonAddUser.setPrefSize(650, 150);
+        buttonAddUser.getStyleClass().add("big-text");
         
-        buttonAddBook.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override public void handle(ActionEvent e) {
-		    	rootStack.getChildren().add(createBookPane());
-		    }
-		});
-        
-        ImageView iconimgfindBook = new ImageView(iconFindBook);
-        Button buttonFindBook = new Button("Find a book", iconimgfindBook);
-        buttonFindBook.setContentDisplay(ContentDisplay.LEFT);
-        buttonFindBook.setPrefWidth(650);
-        buttonFindBook.getStyleClass().add("big-text");
 		
-        ImageView iconimgRemoveBook = new ImageView(iconRemoveBook);
-        Button buttonRemoveBook = new Button("Remove a book", iconimgRemoveBook);
-        buttonRemoveBook.setContentDisplay(ContentDisplay.LEFT);
-        buttonRemoveBook.setPrefWidth(650);
-        buttonRemoveBook.getStyleClass().add("big-text");
-        
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().addAll(buttonAddBook,buttonFindBook,buttonRemoveBook);
+        vBox.getChildren().addAll(buttonAddUser);
         
         return vBox;
-
 	}
 	
 	public static void main(String[] args) {
