@@ -4,14 +4,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
-import dataProcess.persistenceLayer.Administrator;
-import dataProcess.persistenceLayer.Author;
-import dataProcess.persistenceLayer.Book;
-import dataProcess.persistenceLayer.BookSeries;
-import dataProcess.persistenceLayer.Borrowing;
-import dataProcess.persistenceLayer.Customer;
-import dataProcess.persistenceLayer.Editor;
-import dataProcess.persistenceLayer.Theme;
+import dataProcess.domainModel.Administrator;
+import dataProcess.domainModel.Author;
+import dataProcess.domainModel.Book;
+import dataProcess.domainModel.BookSeries;
+import dataProcess.domainModel.Borrowing;
+import dataProcess.domainModel.Customer;
+import dataProcess.domainModel.Editor;
+import dataProcess.domainModel.Theme;
 
 public class DBConnection {
 	private static SessionFactory sessionFactory;
@@ -29,9 +29,7 @@ public class DBConnection {
 			config.addAnnotatedClass(Editor.class);
 			config.addAnnotatedClass(Theme.class);
 
-			String packageName = DBConnection.class.getPackage().getName();
-
-			config.configure(packageName + "/connection.cfg.xml");
+			config.configure("dataProcess/hibernateConfig/connection.cfg.xml");
 
 		}
 		return config;

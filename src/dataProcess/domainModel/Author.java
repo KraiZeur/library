@@ -1,4 +1,4 @@
-package dataProcess.persistenceLayer;
+package dataProcess.domainModel;
 
 
 import java.util.Set;
@@ -26,7 +26,6 @@ public class Author {
 	
 	@OneToMany(mappedBy="author")
     private Set<Book> book;
-	
 	
 	public Author(){
 		

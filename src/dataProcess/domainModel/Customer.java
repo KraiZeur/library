@@ -1,4 +1,4 @@
-package dataProcess.persistenceLayer;
+package dataProcess.domainModel;
 
 
 import java.util.Set;

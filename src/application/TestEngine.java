@@ -1,21 +1,24 @@
 package application;
 
+import java.util.List;
+
 import org.hibernate.Session;
 
+import dataProcess.domainModel.Administrator;
+import dataProcess.domainModel.Author;
+import dataProcess.domainModel.Book;
+import dataProcess.domainModel.BookSeries;
+import dataProcess.domainModel.BookType;
+import dataProcess.domainModel.Borrowing;
+import dataProcess.domainModel.Customer;
+import dataProcess.domainModel.CustomerAdress;
+import dataProcess.domainModel.Editor;
+import dataProcess.domainModel.Login;
+import dataProcess.domainModel.Name;
+import dataProcess.domainModel.Theme;
 import dataProcess.hibernateConfig.DBConnection;
 import dataProcess.hibernateConfig.DataInit;
-import dataProcess.persistenceLayer.Administrator;
-import dataProcess.persistenceLayer.Author;
-import dataProcess.persistenceLayer.Book;
-import dataProcess.persistenceLayer.BookSeries;
-import dataProcess.persistenceLayer.BookType;
-import dataProcess.persistenceLayer.Borrowing;
-import dataProcess.persistenceLayer.Customer;
-import dataProcess.persistenceLayer.CustomerAdress;
-import dataProcess.persistenceLayer.Editor;
-import dataProcess.persistenceLayer.Login;
-import dataProcess.persistenceLayer.Name;
-import dataProcess.persistenceLayer.Theme;
+import dataProcess.serviceLayer.BookService;
 
 public class TestEngine {
 
@@ -84,8 +87,26 @@ public class TestEngine {
 			//operations allow to link table "Borrowing" with others
 			borrowing1.setBook(book1);
 			borrowing1.setCustomer(customer1);
-				
+			
 			session.getTransaction().commit();
+			
+			BookService bs = new BookService();
+			//System.out.println("nombre de livre : " +bs.getDaoBook().count());
+			
+			// TEST 2
+			
+			List<Book> liste = bs.getDaoBook().getBooksByYear(1987);
+			
+			for(Book bk : liste) {
+				System.out.println(bk.getName());
+			}
+			
+			liste = bs.getDaoBook().getBooksByName("o");
+			
+			for(Book bk : liste) {
+				System.out.println(bk.getName());
+			}
+			
 			session.close();
 		}
 	

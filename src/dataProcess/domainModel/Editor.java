@@ -1,4 +1,4 @@
-package dataProcess.persistenceLayer;
+package dataProcess.domainModel;
 
 import java.util.Set;
 
@@ -6,18 +6,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-
 @Entity
+public class Editor {
 
-public class BookSeries {
-	
 	@Id
 	private String name;
 	
-	@OneToMany(mappedBy="bookSeries")
+	@OneToMany(mappedBy="editor")
     private Set<Book> book;
 	
-	public BookSeries(){
+	public Editor(){
 		
 	}
 
@@ -36,6 +34,7 @@ public class BookSeries {
 	public void setBook(Set<Book> book) {
 		this.book = book;
 	}
-
+	
+	
 	
 }
