@@ -1,4 +1,4 @@
-package dataAccessLayer.domainObjects;
+package dataAccessLayer.model;
 
 public enum BookType {
 

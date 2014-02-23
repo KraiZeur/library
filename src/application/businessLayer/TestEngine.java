@@ -4,20 +4,20 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import dataAccessLayer.domainObjects.Administrator;
-import dataAccessLayer.domainObjects.Author;
-import dataAccessLayer.domainObjects.Book;
-import dataAccessLayer.domainObjects.BookSeries;
-import dataAccessLayer.domainObjects.BookType;
-import dataAccessLayer.domainObjects.Borrowing;
-import dataAccessLayer.domainObjects.Customer;
-import dataAccessLayer.domainObjects.CustomerAdress;
-import dataAccessLayer.domainObjects.Editor;
-import dataAccessLayer.domainObjects.Login;
-import dataAccessLayer.domainObjects.Name;
-import dataAccessLayer.domainObjects.Theme;
 import dataAccessLayer.hibernateConfig.DBConnection;
 import dataAccessLayer.hibernateConfig.DataInit;
+import dataAccessLayer.model.Administrator;
+import dataAccessLayer.model.Author;
+import dataAccessLayer.model.Book;
+import dataAccessLayer.model.BookSeries;
+import dataAccessLayer.model.BookType;
+import dataAccessLayer.model.Borrowing;
+import dataAccessLayer.model.Customer;
+import dataAccessLayer.model.CustomerAdress;
+import dataAccessLayer.model.Editor;
+import dataAccessLayer.model.Login;
+import dataAccessLayer.model.Name;
+import dataAccessLayer.model.Theme;
 import dataAccessLayer.serviceLayer.BookService;
 
 public class TestEngine {

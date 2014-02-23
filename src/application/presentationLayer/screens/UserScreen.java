@@ -46,6 +46,7 @@ public class UserScreen implements Screen {
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(buttonAddUser, buttonFindUser, buttonRemoveUser);
         
+        vBox.getStyleClass().add("background-style");
         return vBox;
 	}
 

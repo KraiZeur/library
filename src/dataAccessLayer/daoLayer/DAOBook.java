@@ -6,8 +6,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import dataAccessLayer.domainObjects.Book;
 import dataAccessLayer.hibernateConfig.DBConnection;
+import dataAccessLayer.model.Book;
 
 public class DAOBook implements Dao<Book>{
 
@@ -39,10 +39,16 @@ public class DAOBook implements Dao<Book>{
 
 		return result;
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Book> list() {
-		return null;
+		Transaction readTransaction = session.beginTransaction();
+		Query readQuery = session.createQuery("FROM Book");
+		List<Book> listBooks = readQuery.list();
+		readTransaction.commit();
+
+		return listBooks;
 	}
 	
 	@Override

@@ -19,7 +19,9 @@ public class BookScreen implements Screen {
 	public BookScreen(ScreensController screenController, Stage primaryStage) {
 		this.screenController = screenController;
 		BookCreationScreen bookCreationScreen = new BookCreationScreen(primaryStage);
+		BookFindScreen bookFindScreen = new BookFindScreen(primaryStage);
 		screenController.addScreen("BOOK_CREATION_SCREEN", bookCreationScreen);
+		screenController.addScreen("BOOK_FIND_SCREEN", bookFindScreen);
 	}
 	
 	@Override
@@ -42,6 +44,11 @@ public class BookScreen implements Screen {
         
         ImageView iconimgfindBook = new ImageView(iconFindBook);
         Button buttonFindBook = new Button("Find a book", iconimgfindBook);
+        buttonFindBook.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+		    	screenController.setScreen("BOOK_FIND_SCREEN");
+		    }
+		});
         buttonFindBook.setContentDisplay(ContentDisplay.LEFT);
         buttonFindBook.setPrefWidth(650);
         buttonFindBook.getStyleClass().add("big-text");
@@ -55,6 +62,7 @@ public class BookScreen implements Screen {
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(buttonAddBook,buttonFindBook,buttonRemoveBook);
+        vBox.getStyleClass().add("background-style");
         
         return vBox;
 	}

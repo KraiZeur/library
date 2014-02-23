@@ -1,6 +1,5 @@
 .vbox-layout {
-    -fx-background-color: linear-gradient(#f8f8f8 0%, #e7e7e7 100%);
-    /*-fx-padding: 15 0 0 0;*/
+     -fx-background-color: linear-gradient(#FAFAFA 0%, #DEE0DF 50%, #FAFAFA 100%);
 }
 
 .button-style {
@@ -27,6 +26,12 @@
     -fx-text-fill: #929292;
 }
 
+.top-menu-style {
+     -fx-background-color: linear-gradient(#4F4F4F 0%, #3B3B3B 50%, #4F4F4F 100%);
+     -fx-border-width: 1px;
+     -fx-border-color: linear-gradient(#2A2A2A 0%, #14171B 50%, #333333 100%);
+}
+
 .button-style-test:hover {
     -fx-effect: dropshadow( three-pass-box , rgba(0, 182, 250, 0.4) , 3, 0.0 , 0 , 0 );
     -fx-text-fill: #2FC5F0;
@@ -35,9 +40,12 @@
 .menu-style {
 }
 
+
 .lateral-arrow {
-    -fx-background-color: #B9B9B9; 
     -fx-cursor: hand;
+    -fx-border-color: linear-gradient(#9F9F9F 0%, #282F35 50%, #9F9F9F 100%);
+    -fx-background-color: linear-gradient(#D3D3D3 0%, #B9B9B9 50%, #D3D3D3 100%);
+    -fx-border-width: 1px;
 }
 
 .root-style {
@@ -65,7 +73,20 @@
     -fx-font-size: 35;
 }
 
+.background-style {
+      -fx-background-color: 
+        #090a0c,
+        linear-gradient(#6B7E8F 0%, #495561 20%, #4A5766 100%),
+        linear-gradient(#53626F, #3E4855),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+}
+
 .grid-pane-style {
-  -fx-border-radius: 5;
-  -fx-border-width: 5;
+
+}
+
+.hbox-search-bar {
+  -fx-background-color: linear-gradient(#EDEFF1 0%, #DBDFE3 50%, #E7EAED 100%);
+      -fx-border-color: #26292C;
+    -fx-border-width: 1px;
 }

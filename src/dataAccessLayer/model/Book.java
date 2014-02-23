@@ -1,4 +1,4 @@
-package dataAccessLayer.domainObjects;
+package dataAccessLayer.model;
 
 import java.util.Set;
 
@@ -68,11 +68,7 @@ public class Book {
 	public int getId() {
 		return id;
 	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -162,8 +158,8 @@ public class Book {
 		this.borrowing = borrowing;
 	}
 	
-	
-	
-	
-	
+	public String toString() {
+		return "name : " +name +" year : " +year;
+	}
+
 }

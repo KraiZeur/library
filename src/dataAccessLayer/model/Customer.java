@@ -1,4 +1,4 @@
-package dataAccessLayer.domainObjects;
+package dataAccessLayer.model;
 
 
 import java.util.Set;

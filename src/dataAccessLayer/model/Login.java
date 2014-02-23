@@ -1,4 +1,4 @@
-package dataAccessLayer.domainObjects;
+package dataAccessLayer.model;
 
 import javax.persistence.Embeddable;
 

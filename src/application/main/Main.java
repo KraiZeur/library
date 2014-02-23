@@ -5,8 +5,11 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,6 +36,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import application.presentationLayer.ScreensController;
 import application.presentationLayer.screens.BookScreen;
+import application.presentationLayer.screens.HomeScreen;
 import application.presentationLayer.screens.UserScreen;
 
 
@@ -42,38 +46,41 @@ public class Main extends Application {
 	private boolean isResized = false;
 	private VBox arrow;
 	private HBox lateral;
+	private HBox lateralBar;
 	private BorderPane root = new BorderPane();
 	private GridPane grid = new GridPane();
 	private StackPane rootStack = new StackPane();
 	private ScreensController screenController = new ScreensController();
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
+
 			primaryStage.getIcons().add(new Image("file:img/icon.png"));
 			primaryStage.setTitle("Easy SIGB");
-			
+
 			UserScreen userScreen = new UserScreen(screenController);
 			BookScreen bookScreen = new BookScreen(screenController, primaryStage);
+			HomeScreen homeScreen = new HomeScreen(screenController);
 			screenController.addScreen("USER_SCREEN", userScreen);
 			screenController.addScreen("BOOK_SCREEN", bookScreen);
-			
-			Scene scene = new Scene(root,1024,625);
+			screenController.addScreen("HOME_SCREEN", homeScreen);
+
+			Scene scene = new Scene(root,1070,700);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
-			primaryStage.setMinHeight(625);
-			primaryStage.setMinWidth(1024);
+			primaryStage.setMinHeight(700);
+			primaryStage.setMinWidth(1100);
 
-			HBox lateralBar = createLateralBar();
+			lateralBar = createLateralBar();
 			MenuBar menuBar = createTopMenu();
-			
+
 			rootStack.getStyleClass().add("root-stack-style");
-			
+			screenController.setScreen("HOME_SCREEN");
 			grid.getStyleClass().add("root-style");
-			
+
 			root.setTop(menuBar);
 			root.setCenter(screenController);
 			root.setLeft(lateralBar);
@@ -84,8 +91,9 @@ public class Main extends Application {
 	}
 
 	public MenuBar createTopMenu() {
-		
+
 		final MenuBar menuBar = new MenuBar();
+		menuBar.getStyleClass().add("top-menu-style");
 
 		// Options->Submenu 2 submenu
 		MenuItem menu121 = MenuItemBuilder.create().text("Item 1").build();
@@ -101,7 +109,7 @@ public class Main extends Application {
 				menu13.setText((menu13.getText().equals(change[0])) ? change[1] : change[0]);
 			}
 		});  
-		Menu menu1 = MenuBuilder.create().text("Options").items(menu12, menu13).build();
+		Menu menu1 = MenuBuilder.create().text("File").items(menu12, menu13).build();
 		menuBar.getMenus().addAll(menu1);
 		return menuBar;
 	}
@@ -116,35 +124,35 @@ public class Main extends Application {
 				.prefWidth(150)
 				.styleClass("button-style-test")
 				.build();
-		
+
 		Rectangle[] rect = new Rectangle[10];
-		
+
 		for (int i = 0; i < 10; i++) {
 			rect[i] = new Rectangle(150, 1);
 			rect[i].getStyleClass().add("sep-menu-style");
 			rect[i].setFill(Color.GRAY);
 		}
-		
+
 		Button button2 = new Button("Statistics");
 		button2.setPrefWidth(150);
 		button2.setPrefHeight(35);
 
 		button.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override public void handle(ActionEvent e) {
-		    	screenController.setScreen("BOOK_SCREEN");
-		    }
+			@Override public void handle(ActionEvent e) {
+				screenController.setScreen("BOOK_SCREEN");
+			}
 		});
-		
+
 		Button button3 = new Button("Gestion Emprunt");
 		button3.setPrefWidth(150);
 		button3.setPrefHeight(35);
-		
+
 		button3.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override public void handle(ActionEvent e) {
-		    	FlowPane fp = new FlowPane();
-		    	fp.getStyleClass().add("view2-style");
-		    	rootStack.getChildren().add(gestionBook());
-		    }
+			@Override public void handle(ActionEvent e) {
+				FlowPane fp = new FlowPane();
+				fp.getStyleClass().add("view2-style");
+				rootStack.getChildren().add(gestionBook());
+			}
 		});
 
 		Button button4 = new Button("Gestion Client");
@@ -152,11 +160,11 @@ public class Main extends Application {
 		button4.setPrefHeight(35);
 
 		button4.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override public void handle(ActionEvent e) {
-		    	screenController.setScreen("USER_SCREEN");
-		    }
+			@Override public void handle(ActionEvent e) {
+				screenController.setScreen("USER_SCREEN");
+			}
 		});
-		
+
 		button4.getStyleClass().add("button-style-test");
 		button3.getStyleClass().add("button-style-test");
 		button.getStyleClass().add("button-style-test");
@@ -168,8 +176,22 @@ public class Main extends Application {
 		arrow.setPrefWidth(15);
 		arrow.getStyleClass().add("lateral-arrow");
 
+		Button homeBtn = new Button("Home");
+		homeBtn.getStyleClass().add("button-style-test");
+		
+		homeBtn.setPrefWidth(150);
+		homeBtn.setPrefHeight(35);
+		
+		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				screenController.setScreen("HOME_SCREEN");
+			}
+		});
+		
 		vBox = new VBox();
 		vBox.getChildren().addAll(
+				homeBtn,
+				rect[5],
 				button,
 				rect[1],
 				button4,
@@ -177,15 +199,16 @@ public class Main extends Application {
 				button3,
 				rect[3],
 				button2,
-				rect[4],
-				but
+				rect[4]
 				);
 
+		arrow.setMinWidth(15);
+		vBox.setMinWidth(0);
 		lateral.getChildren().addAll(vBox,arrow);
 
 		vBox.setPrefWidth(150);
 		vBox.getStyleClass().add("vbox-layout");
-		
+
 
 		arrow.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent me){
@@ -198,49 +221,66 @@ public class Main extends Application {
 
 					timeline.getKeyFrames().addAll
 					(new KeyFrame(Duration.ZERO,
-							new KeyValue(lateral.translateXProperty(), -150)),
-							new KeyFrame(new Duration(250),
+							new KeyValue(lateral.translateXProperty(), 0)),
+							new KeyFrame(new Duration(5),
 									new KeyValue(lateral.translateXProperty(), 0)));
-					timeline.playFromStart();
 
+					timeline.playFromStart();
 					isResized = false;
 
 				} else {
 					timeline.getKeyFrames().addAll
-					(new KeyFrame(Duration.ZERO,
-							new KeyValue(lateral.translateXProperty(), 0)),
-							new KeyFrame(new Duration(250),
-									new KeyValue(lateral.translateXProperty(), -150)));
+					(
+							new KeyFrame(Duration.ZERO,
+									new KeyValue(lateral.translateXProperty(), 0)),
+									new KeyFrame(new Duration(5),
+											new KeyValue(lateral.translateXProperty(), 0))
+							);
 
 					timeline.playFromStart();
-
-
 					isResized = true;
+
+
 				}  
+				timeline.setOnFinished(new EventHandler<ActionEvent>() {
+
+					@Override
+					public void handle(ActionEvent event) {
+						if(isResized) {
+							System.out.println("here");
+							vBox.setVisible(false);
+							vBox.setPrefWidth(0);
+						} else {
+							vBox.setVisible(true);
+							vBox.setPrefWidth(150);
+						}
+
+					}
+				});
 			}
 		});
-		
+
 		return lateral;
 
 	}
-	
+
 	public VBox gestionBook() {
 		Image iconAddUser = new Image("file:img/customer-icon-add.png");
-		
-        ImageView iconimgAddUser = new ImageView(iconAddUser);
-        Button buttonAddUser = new Button("Create a book", iconimgAddUser);
-        buttonAddUser.setContentDisplay(ContentDisplay.LEFT);
-        buttonAddUser.setPrefSize(650, 150);
-        buttonAddUser.getStyleClass().add("big-text");
-        
-		
-        VBox vBox = new VBox();
-        vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().addAll(buttonAddUser);
-        
-        return vBox;
+
+		ImageView iconimgAddUser = new ImageView(iconAddUser);
+		Button buttonAddUser = new Button("Create a book", iconimgAddUser);
+		buttonAddUser.setContentDisplay(ContentDisplay.LEFT);
+		buttonAddUser.setPrefSize(650, 150);
+		buttonAddUser.getStyleClass().add("big-text");
+
+
+		VBox vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.getChildren().addAll(buttonAddUser);
+
+		return vBox;
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
