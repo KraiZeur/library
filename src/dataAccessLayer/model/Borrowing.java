@@ -1,11 +1,20 @@
 package dataAccessLayer.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 @Entity
 public class Borrowing {
 	
@@ -15,9 +24,11 @@ public class Borrowing {
 	
 	private double price;
 	
-	private String date_borrowing;
+	@Temporal(TemporalType.DATE)
+	private Date date_borrowing;
 	
-	private String date_delivery;
+	@Temporal(TemporalType.DATE)
+	private Date date_delivery;
 	
 	@ManyToOne
     @JoinColumn(name="Id_Book")
@@ -31,7 +42,7 @@ public class Borrowing {
 		
 	}
 	
-	public Borrowing(double price, String date_borrowing,String date_delivery){
+	public Borrowing(double price, Date date_borrowing,Date date_delivery){
 		this.price=price;
 		this.date_borrowing=date_borrowing;
 		this.date_delivery=date_delivery;
@@ -55,19 +66,19 @@ public class Borrowing {
 		this.price = price;
 	}
 
-	public String getDate_borrowing() {
+	public Date getDate_borrowing() {
 		return date_borrowing;
 	}
 
-	public void setDate_borrowing(String date_borrowing) {
+	public void setDate_borrowing(Date date_borrowing) {
 		this.date_borrowing = date_borrowing;
 	}
 
-	public String getDate_delivery() {
+	public Date getDate_delivery() {
 		return date_delivery;
 	}
 
-	public void setDate_delivery(String date_delivery) {
+	public void setDate_delivery(Date date_delivery) {
 		this.date_delivery = date_delivery;
 	}
 

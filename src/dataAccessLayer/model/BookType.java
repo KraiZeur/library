@@ -1,11 +1,22 @@
 package dataAccessLayer.model;
 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 public enum BookType {
-
-    comics,
-	novel,
-	computer_and_technology,
-	politic;
-    
-	
+	Arts,
+	Biographies,
+    Comics,
+    Cookbooks,
+    History,
+    Law,
+    Medicine,
+	Novel,
+	Politic,
+	Romance,
+	Technology,
+	Travel,
+	Sports;
 }

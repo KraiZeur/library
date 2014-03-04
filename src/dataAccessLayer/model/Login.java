@@ -2,6 +2,11 @@ package dataAccessLayer.model;
 
 import javax.persistence.Embeddable;
 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 @Embeddable
 public class Login {
 

@@ -1,31 +1,22 @@
 package application.main;
 
-
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBuilder;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuBuilder;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.MenuItemBuilder;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -35,44 +26,76 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import application.presentationLayer.ScreensController;
-import application.presentationLayer.screens.BookScreen;
 import application.presentationLayer.screens.HomeScreen;
-import application.presentationLayer.screens.UserScreen;
+import application.presentationLayer.screens.LoginScreen;
+import application.presentationLayer.screens.bookScreens.BookScreen;
+import application.presentationLayer.screens.borrowScreens.BorrowScreen;
+import application.presentationLayer.screens.statScreens.StatisticScreen;
+import application.presentationLayer.screens.userScreens.UserScreen;
 
-
+/**
+ * Main program
+ * @author Thomas
+ *
+ */
 public class Main extends Application {
 
+	/**
+	 * the vbox of the screen
+	 */
 	private VBox vBox;
+	/**
+	 * A boolean to check if the lateral bar is hidden or visible
+	 */
 	private boolean isResized = false;
+	/**
+	 * The bar to hide or display the lateral bar
+	 */
 	private VBox arrow;
+	/**
+	 * The box containing the lateral bar
+	 */
 	private HBox lateral;
+	/**
+	 * lateral bar
+	 */
 	private HBox lateralBar;
+	/**
+	 * The root Pane contains, every pane
+	 */
 	private BorderPane root = new BorderPane();
+	/**
+	 * The grid pane to display the home menu
+	 */
 	private GridPane grid = new GridPane();
+	/**
+	 * The root Pane who has two state login and program
+	 */
 	private StackPane rootStack = new StackPane();
+	/**
+	 * The screen controller to manage the all the application's screenss
+	 */
 	private ScreensController screenController = new ScreensController();
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
 			primaryStage.getIcons().add(new Image("file:img/icon.png"));
 			primaryStage.setTitle("Easy SIGB");
 
-			UserScreen userScreen = new UserScreen(screenController);
+			UserScreen userScreen = new UserScreen(screenController, primaryStage);
 			BookScreen bookScreen = new BookScreen(screenController, primaryStage);
 			HomeScreen homeScreen = new HomeScreen(screenController);
+			BorrowScreen borrowScreen = new BorrowScreen(screenController, primaryStage); 
+			StatisticScreen statScreen = new StatisticScreen(screenController); 
 			screenController.addScreen("USER_SCREEN", userScreen);
 			screenController.addScreen("BOOK_SCREEN", bookScreen);
 			screenController.addScreen("HOME_SCREEN", homeScreen);
-
-			Scene scene = new Scene(root,1070,700);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setScene(scene);
-			primaryStage.show();
+			screenController.addScreen("BORROW_SCREEN", borrowScreen);
+			screenController.addScreen("STAT_SCREEN", statScreen);
 
 			primaryStage.setMinHeight(700);
-			primaryStage.setMinWidth(1100);
+			primaryStage.setMinWidth(1115);
 
 			lateralBar = createLateralBar();
 			MenuBar menuBar = createTopMenu();
@@ -84,46 +107,52 @@ public class Main extends Application {
 			root.setTop(menuBar);
 			root.setCenter(screenController);
 			root.setLeft(lateralBar);
+			
+			LoginScreen loginScreen = new LoginScreen();
+			
+			StackPane stckPane = new StackPane();
+			stckPane.getChildren().add(root);
+			stckPane.getChildren().add(loginScreen);
+			loginScreen.setStckPane(stckPane);
+			
+			Scene scene = new Scene(stckPane,1070,700);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.show();
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public MenuBar createTopMenu() {
+	/**
+	 * Create the top menu bar of the program
+	 * @return the menu bar
+	 */
+	private MenuBar createTopMenu() {
 
 		final MenuBar menuBar = new MenuBar();
 		menuBar.getStyleClass().add("top-menu-style");
-
-		// Options->Submenu 2 submenu
-		MenuItem menu121 = MenuItemBuilder.create().text("Item 1").build();
-		MenuItem menu122 = MenuItemBuilder.create().text("Item 2").build();
-		Menu menu12 = MenuBuilder.create().text("Submenu 2").items(menu121, menu122).build();
-
-		// Options->Change Text
-		final String change[] = {"Change Text", "Change Back"};
-		final MenuItem menu13 = MenuItemBuilder.create().text(change[0]).accelerator(KeyCombination.keyCombination("Shortcut+C")).build();
+		final MenuItem menu13 = MenuItemBuilder.create().text("Quit").accelerator(KeyCombination.keyCombination("Shortcut+Q")).build();
 		menu13.setOnAction(new EventHandler<ActionEvent>() {
 
 			public void handle(ActionEvent t) {
-				menu13.setText((menu13.getText().equals(change[0])) ? change[1] : change[0]);
+				System.exit(0);
 			}
 		});  
-		Menu menu1 = MenuBuilder.create().text("File").items(menu12, menu13).build();
+		Menu menu1 = MenuBuilder.create().text("File").items(menu13).build();
 		menuBar.getMenus().addAll(menu1);
 		return menuBar;
 	}
 
-	public HBox createLateralBar() {
-		Button button = new Button("Gestion Ouvrage");
+	/**
+	 * Create the lateral bar of the program
+	 * @return the lateral bar
+	 */
+	private HBox createLateralBar() {
+		Button button = new Button("Book");
 		button.setPrefWidth(150);
 		button.setPrefHeight(35);
-
-		Button but = ButtonBuilder.create()
-				.text("button")
-				.prefWidth(150)
-				.styleClass("button-style-test")
-				.build();
 
 		Rectangle[] rect = new Rectangle[10];
 
@@ -143,19 +172,23 @@ public class Main extends Application {
 			}
 		});
 
-		Button button3 = new Button("Gestion Emprunt");
+		button2.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				screenController.setScreen("STAT_SCREEN");
+			}
+		});
+
+		Button button3 = new Button("Borrow");
 		button3.setPrefWidth(150);
 		button3.setPrefHeight(35);
 
 		button3.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
-				FlowPane fp = new FlowPane();
-				fp.getStyleClass().add("view2-style");
-				rootStack.getChildren().add(gestionBook());
+				screenController.setScreen("BORROW_SCREEN");
 			}
 		});
 
-		Button button4 = new Button("Gestion Client");
+		Button button4 = new Button("Customer");
 		button4.setPrefWidth(150);
 		button4.setPrefHeight(35);
 
@@ -178,29 +211,18 @@ public class Main extends Application {
 
 		Button homeBtn = new Button("Home");
 		homeBtn.getStyleClass().add("button-style-test");
-		
+
 		homeBtn.setPrefWidth(150);
 		homeBtn.setPrefHeight(35);
-		
+
 		homeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent e) {
 				screenController.setScreen("HOME_SCREEN");
 			}
 		});
-		
+
 		vBox = new VBox();
-		vBox.getChildren().addAll(
-				homeBtn,
-				rect[5],
-				button,
-				rect[1],
-				button4,
-				rect[2],
-				button3,
-				rect[3],
-				button2,
-				rect[4]
-				);
+		vBox.getChildren().addAll(homeBtn,rect[5],button,rect[1],button4,rect[2],button3,rect[3],button2,rect[4]);
 
 		arrow.setMinWidth(15);
 		vBox.setMinWidth(0);
@@ -209,7 +231,7 @@ public class Main extends Application {
 		vBox.setPrefWidth(150);
 		vBox.getStyleClass().add("vbox-layout");
 
-
+		// The animation when the user click on the lateral bar
 		arrow.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent me){
 
@@ -218,19 +240,16 @@ public class Main extends Application {
 				if(isResized) {
 
 					timeline.setAutoReverse(true);
-
 					timeline.getKeyFrames().addAll
 					(new KeyFrame(Duration.ZERO,
 							new KeyValue(lateral.translateXProperty(), 0)),
 							new KeyFrame(new Duration(5),
 									new KeyValue(lateral.translateXProperty(), 0)));
-
 					timeline.playFromStart();
 					isResized = false;
 
 				} else {
-					timeline.getKeyFrames().addAll
-					(
+					timeline.getKeyFrames().addAll(
 							new KeyFrame(Duration.ZERO,
 									new KeyValue(lateral.translateXProperty(), 0)),
 									new KeyFrame(new Duration(5),
@@ -239,9 +258,8 @@ public class Main extends Application {
 
 					timeline.playFromStart();
 					isResized = true;
-
-
 				}  
+
 				timeline.setOnFinished(new EventHandler<ActionEvent>() {
 
 					@Override
@@ -254,7 +272,6 @@ public class Main extends Application {
 							vBox.setVisible(true);
 							vBox.setPrefWidth(150);
 						}
-
 					}
 				});
 			}
@@ -264,23 +281,10 @@ public class Main extends Application {
 
 	}
 
-	public VBox gestionBook() {
-		Image iconAddUser = new Image("file:img/customer-icon-add.png");
-
-		ImageView iconimgAddUser = new ImageView(iconAddUser);
-		Button buttonAddUser = new Button("Create a book", iconimgAddUser);
-		buttonAddUser.setContentDisplay(ContentDisplay.LEFT);
-		buttonAddUser.setPrefSize(650, 150);
-		buttonAddUser.getStyleClass().add("big-text");
-
-
-		VBox vBox = new VBox();
-		vBox.setAlignment(Pos.CENTER);
-		vBox.getChildren().addAll(buttonAddUser);
-
-		return vBox;
-	}
-
+	/**
+	 * The main method
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}

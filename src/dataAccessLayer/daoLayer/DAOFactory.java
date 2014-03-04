@@ -1,9 +1,21 @@
 package dataAccessLayer.daoLayer;
-
+ 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 public class DAOFactory {
-
-	public static DAOBook getUserDAO() {
-		return new DAOBook();
-	}
-
+ 
+        private static DAOBook daoBook = new DAOBook();
+       
+        public static DAOBook getBookDAO() {
+                return daoBook;
+        }
+ 
+        private static DAOCustomer daoCustomer = new  DAOCustomer();
+       
+        public static DAOCustomer getCustomerDAO(){
+                return daoCustomer;
+        }
 }

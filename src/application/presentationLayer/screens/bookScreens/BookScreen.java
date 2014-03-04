@@ -1,6 +1,7 @@
-package application.presentationLayer.screens;
+package application.presentationLayer.screens.bookScreens;
 
 import application.presentationLayer.ScreensController;
+import application.presentationLayer.screens.Screen;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -12,16 +13,31 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * The screen containing the book creation screen, find screen, remove screen
+ * @author Thomas
+ *
+ */
 public class BookScreen implements Screen {
 
+	/**
+	 * The screenController of the application
+	 */
 	private ScreensController screenController;
 	
+	/**
+	 * 
+	 * @param screenController
+	 * @param primaryStage
+	 */
 	public BookScreen(ScreensController screenController, Stage primaryStage) {
 		this.screenController = screenController;
 		BookCreationScreen bookCreationScreen = new BookCreationScreen(primaryStage);
 		BookFindScreen bookFindScreen = new BookFindScreen(primaryStage);
+		BookRemoveScreen bookRemoveScreen = new BookRemoveScreen(primaryStage);
 		screenController.addScreen("BOOK_CREATION_SCREEN", bookCreationScreen);
 		screenController.addScreen("BOOK_FIND_SCREEN", bookFindScreen);
+		screenController.addScreen("BOOK_REMOVE_SCREEN", bookRemoveScreen);
 	}
 	
 	@Override
@@ -58,11 +74,18 @@ public class BookScreen implements Screen {
         buttonRemoveBook.setContentDisplay(ContentDisplay.LEFT);
         buttonRemoveBook.setPrefWidth(650);
         buttonRemoveBook.getStyleClass().add("big-text");
+        buttonRemoveBook.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+		    	screenController.setScreen("BOOK_REMOVE_SCREEN");
+		    }
+		});
         
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(buttonAddBook,buttonFindBook,buttonRemoveBook);
         vBox.getStyleClass().add("background-style");
+        
+        vBox.setSpacing(5);
         
         return vBox;
 	}

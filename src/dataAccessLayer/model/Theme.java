@@ -6,6 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 @Entity
 public class Theme {
 
@@ -17,6 +22,10 @@ public class Theme {
 	
 	public Theme(){
 		
+	}
+	
+	public Theme(String name){
+		this.name=name;
 	}
 
 	public String getName() {

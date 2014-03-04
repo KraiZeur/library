@@ -10,7 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 @Entity
 public class Book {
 
@@ -50,18 +56,21 @@ public class Book {
 	@OneToMany(mappedBy="book")
     private Set<Borrowing> borrowing;
 	
+	@Transient
+	public static final String  DEFAULT_IMG_PATH = "img/books/default_book.png";
 	
 	public Book(){
 		
 	}
 	
-	public Book(BookType bookType, String cover, String name, String description,int year,Boolean availibility) {
-		this.bookType=bookType;
-		this.cover=cover;
+	public Book(BookType bookType, Author author, String cover, String name, String description,int year,Boolean availibility) {
+		this.bookType = bookType;
+		this.author = author;
+		this.cover = cover;
         this.name = name;
         this.description = description;
-        this.year=year;
-        this.availibility=availibility;
+        this.year = year;
+        this.availibility = availibility;
 	}
 
 
@@ -150,13 +159,13 @@ public class Book {
 		this.year = year;
 	}
 
-	public Set<Borrowing> getBorrowing() {
-		return borrowing;
-	}
-
-	public void setBorrowing(Set<Borrowing> borrowing) {
-		this.borrowing = borrowing;
-	}
+//	public Set<Borrowing> getBorrowing() {
+//		return borrowing;
+//	}
+//
+//	public void setBorrowing(Set<Borrowing> borrowing) {
+//		this.borrowing = borrowing;
+//	}
 	
 	public String toString() {
 		return "name : " +name +" year : " +year;

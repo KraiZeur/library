@@ -1,17 +1,12 @@
-package application.presentationLayer.screens;
+package application.presentationLayer.screens.bookScreens;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -20,14 +15,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import application.businessLayer.BookCreationManager;
+import application.businessLayer.controller.BookController;
+import application.businessLayer.utils.DialogUtil;
 import application.businessLayer.utils.ImageUtil;
+import application.presentationLayer.screens.Screen;
 import dataAccessLayer.model.BookType;
 
+/**
+ * The screen to create a book
+ * @author Thomas
+ *
+ */
 public class BookCreationScreen implements Screen {
 
 	private final FileChooser fileChooser = new FileChooser();
@@ -40,7 +40,8 @@ public class BookCreationScreen implements Screen {
 	private GridPane gridPane;
 	private File file;
 	private File dest;
-	private static final String  DEFAULT_IMG_PATH = "img/books/default_book.png";
+	private Label labelFileName;
+	private TextArea description = new TextArea();
 
 	public BookCreationScreen(Stage primaryStage) {
 		this.primaryStage = primaryStage;
@@ -51,54 +52,41 @@ public class BookCreationScreen implements Screen {
 
 		gridPane = new GridPane();
 		FlowPane flowplane = new FlowPane();
+
+		/* Grid pane and flow pane parameters */
 		flowplane.getChildren().add(gridPane);
 		gridPane.setStyle("-fx-font: bold 18pt \"Times New Roman\";");
-
 		gridPane.setHgap(5); gridPane.setVgap(5);
 		gridPane.getStyleClass().add("grid-pane-style");
 		gridPane.setStyle("-fx-background-color: linear-gradient(#E8EAEC 0%, #CCD1D7 50%, #E8EAEC 100%); -fx-padding: 35px;-fx-background-radius: 35px;");
 		flowplane.getStyleClass().add("background-style");
+		gridPane.setAlignment(Pos.CENTER);
+		flowplane.setAlignment(Pos.CENTER);
 
+		/* Creation of the different label and textfield inside the formulaire */
 		Label labelName = new Label("Book Name :");
 		GridPane.setHalignment(labelName, HPos.RIGHT);
 
 		Label labelAuthor = new Label("Author :");
 		GridPane.setHalignment(labelAuthor, HPos.RIGHT);
 
-
 		Label labelYear = new Label("Publication Year :");
 		GridPane.setHalignment(labelYear, HPos.RIGHT);
-
 
 		Label labelBookSeries = new Label("Book Series :");
 		GridPane.setHalignment(labelBookSeries, HPos.RIGHT);
 
-		List<Label> listLabel = new ArrayList<Label>();
-		listLabel.add(labelName);
-		listLabel.add(labelAuthor);
-		listLabel.add(labelBookSeries);
-		listLabel.add(labelYear);
-		
 		TextArea taNotes = new TextArea();
 		taNotes.setPrefColumnCount(2);
 		taNotes.setPrefRowCount(1);
 
-
-		gridPane.add(labelName, 0, 0);
-		gridPane.add(textFieldName, 1, 0);
+		description.setPromptText("Enter the book's description");
+		
+		Label labelCover = new Label("Cover :");
+		GridPane.setHalignment(labelCover, HPos.RIGHT);
 
 		Button authorButton = new Button("New Author");
 		GridPane.setHalignment(authorButton, HPos.LEFT);
-		gridPane.add(authorButton, 2, 1);
-
-		gridPane.add(labelAuthor, 0, 1);
-		gridPane.add(textFieldAuthor, 1, 1);
-
-		gridPane.add(labelYear, 0, 2);
-		gridPane.add(textFieldYear, 1, 2);
-
-		gridPane.add(labelBookSeries, 0, 3);
-		gridPane.add(textFieldBookSeries, 1, 3);
 
 		cb = new ChoiceBox<BookType>();
 		for (BookType bookType : BookType.values()) {
@@ -111,83 +99,95 @@ public class BookCreationScreen implements Screen {
 		GridPane.setHalignment(labelBookType, HPos.RIGHT);
 
 		Button openButton = new Button("Open a Picture...");
+		Button submitBtn = new Button("Create");
+		/* End creation of formulaire components */
+
+		/* Adding the components to the grid pane */
+		gridPane.add(labelName, 0, 0);
+		gridPane.add(textFieldName, 1, 0);
+		textFieldName.setPromptText("Book's Name");
+		//gridPane.add(authorButton, 2, 1);
+		gridPane.add(labelAuthor, 0, 1);
+		gridPane.add(textFieldAuthor, 1, 1);
+		textFieldAuthor.setPromptText("Lastname, Firstname");
+		gridPane.add(labelYear, 0, 2);
+		gridPane.add(textFieldYear, 1, 2);
+		textFieldYear.setPromptText("Year");
+		gridPane.add(labelBookSeries, 0, 3);
+		gridPane.add(textFieldBookSeries, 1, 3);
+		textFieldBookSeries.setPromptText("Enter the book's series");
+		gridPane.add(labelBookType, 0, 5);
+		gridPane.add(cb, 1, 5);
+		gridPane.add(labelCover, 0, 6);
+		gridPane.add(openButton, 1, 6);
+		gridPane.add(new Label("Description"), 0, 4);
+		description.setWrapText(true);
+		gridPane.add(description, 1, 4);
+		description.setPrefWidth(200);
+		gridPane.add(submitBtn, 1, 9);
+		/* End adding components to the grid pane */
 
 
+		/* Button's action */
+		/* Action when the user click on the add picture button */
 		openButton.setOnAction(
 				new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(final ActionEvent e) {
 						file = fileChooser.showOpenDialog(primaryStage);
 						if (file != null) {
+
+							labelFileName = new Label(file.getName());
 							
 							File folder = new File("img/books/");
 							int count = folder.list().length;
-							
-							dest = new File("img/books/" +"book_"+count +"_"+file.getName());
-							
 
-							
-							gridPane.add(new Label(file.getName()), 2, 5);
+							dest = new File("img/books/" +"book_"+count +"_"+file.getName());
+
+							gridPane.add(labelFileName, 2, 6); // Add the label when the file is loaded
 						}
 					}
 				});
-
-		gridPane.add(labelBookType, 0, 4);
-		gridPane.add(cb, 1, 4);
-
-		Label labelCover = new Label("Cover :");
-		GridPane.setHalignment(labelCover, HPos.RIGHT);
-
-		gridPane.add(labelCover, 0, 5);
-		gridPane.add(openButton, 1, 5);
-
-		Button submitBtn = new Button("Create");
-
+		
+		/* Action when the user submit the formulaire */
 		submitBtn.setOnAction(
 				new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(final ActionEvent e) {
-						int checkNum;
-						
+
+						BookController bookCtrl = new BookController();
+
 						if( dest != null) {
 							try {
 								ImageUtil.copyFile(file, dest);
 							} catch (IOException e1) {
 								System.out.println(e1.getMessage());
 							}
-							checkNum = BookCreationManager.createBook(textFieldName.getText(), cb.getValue(), dest.getPath(), "description", textFieldYear.getText());
+						} 
+						
+						String result = "";
+						
+						if(dest == null) {
+							result = bookCtrl.createBookWithParameters(textFieldName.getText(), textFieldAuthor.getText(), textFieldYear.getText(), cb.getValue(), null, description.getText());
 						} else {
-							checkNum = BookCreationManager.createBook(textFieldName.getText(), cb.getValue(), DEFAULT_IMG_PATH, "description", textFieldYear.getText());
+							result = bookCtrl.createBookWithParameters(textFieldName.getText(), textFieldAuthor.getText(), textFieldYear.getText(), cb.getValue(), dest.getPath(), description.getText());
 						}
 
-						switch(checkNum) {
-
-						case 0:
-							System.err.println("errror");
-							break;
-						case 1: 
-							Stage dialog = new Stage();
-							dialog.initStyle(StageStyle.UTILITY);
-							Scene scene = new Scene(new Group(new Text(25, 25, "Book Created !")));
-							dialog.setHeight(75);
-							dialog.setWidth(150);
-							dialog.setScene(scene);
-							dialog.show();
+						if(result.equals("Creation succeed")) {
+							if(file != null) {
+								gridPane.getChildren().remove(15);
+							}
 							file = null;
-							break;
-
+							dest = null;
+							
 						}
+
+						DialogUtil.basicDialog(result);
+
 					}
 				});
-
-		gridPane.add(submitBtn, 1, 8);
-		
-		gridPane.setAlignment(Pos.CENTER);
-		flowplane.setAlignment(Pos.CENTER);
+		/* End button's action */
 
 		return flowplane;
 	}
-
-
-
 }

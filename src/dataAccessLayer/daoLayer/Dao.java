@@ -2,7 +2,12 @@ package dataAccessLayer.daoLayer;
 
 import java.util.List;
 
-
+/**
+ * 
+ * @author Jeremy
+ *
+ * @param <T>
+ */
 public interface Dao<T> {
 	boolean create(T object);
 	T find(int index);

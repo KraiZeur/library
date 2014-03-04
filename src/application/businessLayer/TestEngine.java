@@ -1,30 +1,15 @@
 package application.businessLayer;
 
-import java.util.List;
-
-import org.hibernate.Session;
-
-import dataAccessLayer.hibernateConfig.DBConnection;
-import dataAccessLayer.hibernateConfig.DataInit;
-import dataAccessLayer.model.Administrator;
-import dataAccessLayer.model.Author;
-import dataAccessLayer.model.Book;
-import dataAccessLayer.model.BookSeries;
-import dataAccessLayer.model.BookType;
-import dataAccessLayer.model.Borrowing;
-import dataAccessLayer.model.Customer;
-import dataAccessLayer.model.CustomerAdress;
-import dataAccessLayer.model.Editor;
-import dataAccessLayer.model.Login;
-import dataAccessLayer.model.Name;
-import dataAccessLayer.model.Theme;
-import dataAccessLayer.serviceLayer.BookService;
-
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 public class TestEngine {
 
 		public static void main(String[] args) {
 			//DataInit.createTables();
-			Session session = DBConnection.getSession();
+		/*	Session session = DBConnection.getSession();
 			session.beginTransaction();
 			
 			//create author
@@ -93,21 +78,133 @@ public class TestEngine {
 			BookService bs = new BookService();
 			//System.out.println("nombre de livre : " +bs.getDaoBook().count());
 			
-			// TEST 2
-			
-			List<Book> liste = bs.getDaoBook().getBooksByYear(1987);
-			
-			for(Book bk : liste) {
-				System.out.println(bk.getName());
-			}
-			
-			liste = bs.getDaoBook().getBooksByName("o");
-			
-			for(Book bk : liste) {
-				System.out.println(bk.getName());
-			}
+
 			
 			session.close();
+			*/
+			// TEST 2 ( for class  DAOBook)
+			 
+				
+				/*  Session session = DBConnection.getSession();
+					session.beginTransaction();
+					BookService bs = new BookService();
+				List<Book> liste = bs.getDaoBook().getBooksByYear(1987);
+					
+					for(Book bk : liste) {
+						System.out.println(bk.getName());
+					}
+					
+					liste = bs.getDaoBook().getBooksByName("o");
+					
+					for(Book bk : liste) {
+						System.out.println(bk.getName());
+					}
+					
+					List<Book> liste1=bs.getDaoBook().getBooksByAuthor(2);
+					for (Book br : liste1 ){
+						System.out.println(br.getName());
+					}
+					
+					List<Book> liste2=bs.getDaoBook().getBooksByParameters("Roi lion",1987,"comics","cover1","simba et pumba",true );
+					
+					for(Book br : liste2)
+						System.out.println(br.getName());
+					session.close();
+					
+			*/
+			
+					// TEST 3 ( for class DAOAuthor)	
+					
+					/*DAOAuthor daoAuthor = new DAOAuthor();
+					Author author = new Author("biography","12-12-1992",new Name("Albert","Camus"));
+					daoAuthor.create(author);*/
+				/*	Session session = DBConnection.getSession();
+					session.beginTransaction();
+					AuthorService as = new AuthorService();
+					List<Author> liste1 = as.getDaoAuthor().getAuthorByName("Agatha", "Christie");
+					
+					for(Author ar : liste1) {
+						System.out.println(ar.getName());
+					}
+					
+					List<Author> list=as.getDaoAuthor().getAuthorByParameters("Agatha","Christie","12-12-1992","biography");
+					
+					for(Author ar : list){
+						System.out.println(ar.getName());
+					}
+					
+					session.close();*/
+					
+					// TEST 4( for class BookSeries)
+					
+				/*	DAOBookSeries daoBookSeries = new DAOBookSeries();
+					BookSeries bookSeries = new BookSeries ("2ème collection DAO");
+					daoBookSeries.create(bookSeries); */
+					
+				/*	Session session = DBConnection.getSession();
+					session.beginTransaction();
+					BookSeriesService bss = new BookSeriesService();
+					List<BookSeries> liste = bss.getDaoBookSeries().getBookSeriesByName("2");
+					
+					for(BookSeries bs : liste) {
+						System.out.println(bs.getName());
+					}
+					
+					session.close();
+					*/
+					
+					// TEST 5 ( for class Editor)
+					
+					/*DAOEditor daoEditor = new DAOEditor();
+					Editor editor = new Editor ("2ème editeur");
+					daoEditor.create(editor);
+					*/
+					/*Session session = DBConnection.getSession();
+					session.beginTransaction();
+					EditorService es = new EditorService();
+					List<Editor> liste = es.getDaoEditor().getEditorByName("1");
+					
+					for(Editor er : liste) {
+						System.out.println(er.getName());
+					}
+					
+					session.close();
+					*/
+					// TEST 6 ( for class Customer)
+					
+					/*DAOCustomer daoCustomer = new DAOCustomer();
+					Customer customer = new Customer(new Name("Thomas","Ritaly"), new CustomerAdress("37","rue du MiniMarket","Sannois",78500),"17-08-2013");
+					daoCustomer.create(customer);
+					*/
+				/*    Session session = DBConnection.getSession();
+					session.beginTransaction();
+					CustomerService cs = new CustomerService();
+					List<Customer> liste = cs.getDaoCustomer().getCustomerByName("Jeremy","Carayon");
+					
+					for(Customer cr : liste) {
+						System.out.println(cr.getName());
+					}
+					
+					List<Customer> liste2= cs.getDaoCustomer().getCustomerByParameters("Jeremy","Carayon","33","rue Lebon","Sartrouville",78500,"10-02-2014");
+					for(Customer cr:liste2){
+						System.out.println(cr.getName());
+					}
+						*/		
+					
+					
+					// TEST 7 ( for class Theme)
+					
+				/*	DAOTheme daoTheme = new DAOTheme();
+					Theme theme = new Theme ("football");
+					daoTheme.create(theme);*/
+					
+			/*		ThemeService ts = new ThemeService();
+					List<Theme> list = ts.getDaoTheme().getThemeByName("foot");
+					
+					for(Theme te: list){
+						System.out.println(te.getName());
+					}
+					*/
 		}
 	
 }

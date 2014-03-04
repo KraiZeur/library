@@ -1,5 +1,10 @@
 package dataAccessLayer.model;
 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 public class Name {
 
 	private String firstname;
@@ -29,6 +34,10 @@ public class Name {
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+	
+	public String toString() {
+		return lastname +" " +firstname;
 	}
 	
 }

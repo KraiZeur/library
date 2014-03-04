@@ -7,8 +7,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * An util class on the image manipulation
+ * @author Thomas
+ *
+ */
 public class ImageUtil {
 
+	/**
+	 * Copy a file 
+	 * @param source the image's source
+	 * @param dest the image's destination
+	 * @throws IOException
+	 */
 	public static void copyFile(File source, File dest) throws IOException {
 		InputStream input = null;
 		OutputStream output = null;
@@ -21,7 +32,6 @@ public class ImageUtil {
 			int bytesRead;
 
 			while ((bytesRead = input.read(buf)) > 0) {
-
 				output.write(buf, 0, bytesRead);
 			}
 
